@@ -7,11 +7,33 @@
 
 import SwiftUI
 
+import Firebase
+
+
+
 @main
-struct Padel_GoApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+
+struct PadelGoApp: App {
+
+
+
+    init() {
+
+        FirebaseApp.configure()
+
     }
+
+
+
+    var body: some Scene {
+
+        WindowGroup {
+
+            ContentView()
+
+        }
+
+    }
+
 }
+

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3F0F0EEF2FC9482100387A91 /* Padel_GoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0F0EEE2FC9482100387A91 /* Padel_GoApp.swift */; };
+		3F0F0EEF2FC9482100387A91 /* PadelGoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0F0EEE2FC9482100387A91 /* PadelGoApp.swift */; };
 		3F0F0EF12FC9482100387A91 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F0F0EF02FC9482100387A91 /* ContentView.swift */; };
 		3F0F0EF32FC9482200387A91 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F0F0EF22FC9482200387A91 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -31,7 +31,7 @@
 
 /* Begin PBXFileReference section */
 		3F0F0EEB2FC9482100387A91 /* Padel Go.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Padel Go.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		3F0F0EEE2FC9482100387A91 /* Padel_GoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Padel_GoApp.swift; sourceTree = "<group>"; };
+		3F0F0EEE2FC9482100387A91 /* PadelGoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadelGoApp.swift; sourceTree = "<group>"; };
 		3F0F0EF02FC9482100387A91 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3F0F0EF22FC9482200387A91 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3F0F0EF82FC9482200387A91 /* Padel GoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Padel GoTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -96,7 +96,7 @@
 				3F0F0EEC2FC9482100387A91 /* Products */,
 				3F0F0EF22FC9482200387A91 /* Assets.xcassets */,
 				3F0F0EF02FC9482100387A91 /* ContentView.swift */,
-				3F0F0EEE2FC9482100387A91 /* Padel_GoApp.swift */,
+				3F0F0EEE2FC9482100387A91 /* PadelGoApp.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -253,7 +253,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F0F0EF12FC9482100387A91 /* ContentView.swift in Sources */,
-				3F0F0EEF2FC9482100387A91 /* Padel_GoApp.swift in Sources */,
+				3F0F0EEF2FC9482100387A91 /* PadelGoApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
