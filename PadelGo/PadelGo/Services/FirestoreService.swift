@@ -104,7 +104,28 @@ private let db = Firestore.firestore()
                 completion(exercises)
             }
     }
+    
+    // SAVE FULL CURRENT PROGRESS
 
+    func saveProgress(
+        progress: [String: [String: Double]],
+        completion: (() -> Void)? = nil
+    ) {
+
+        db.collection("user_progress")
+            .document("local_user")
+            .setData(progress) { error in
+
+                if let error = error {
+
+                    print("Error saving progress: \(error)")
+                } else {
+
+                    print("Progress saved successfully")
+                    completion?()
+                }
+            }
+    }
     
     
 
