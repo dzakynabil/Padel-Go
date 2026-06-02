@@ -127,7 +127,7 @@ private let db = Firestore.firestore()
             }
     }
     
-    //FETCH CURRENT PROGRESS
+    // FETCH CURRENT PROGRESS
 
     func fetchProgress(
         completion: @escaping ([String: [String: Double]]) -> Void
@@ -157,6 +157,34 @@ private let db = Firestore.firestore()
                 }
 
                 completion(formatted)
+            }
+    }
+    
+    // SAVE HISTORY
+
+    func saveProgressHistory(
+        progress: [String: [String: Double]]
+    ) {
+
+        let historyId = UUID().uuidString
+
+
+        db.collection("progress_history")
+            .document(historyId)
+            .setData([
+
+                "id": historyId,
+                "date": Timestamp(date: Date()),
+                "progress": progress
+            ]) { error in
+
+                if let error = error {
+
+                    print("History save error: \(error)")
+                } else {
+
+                    print("History saved")
+                }
             }
     }
     
