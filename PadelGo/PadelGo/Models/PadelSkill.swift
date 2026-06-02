@@ -60,6 +60,56 @@ class PadelDataService: ObservableObject {
         fetchProgress()
         fetchHistory()
     }
+    
+    func fetchSkills() {
+
+        FirestoreService.shared.fetchSkills { skills in
+
+            DispatchQueue.main.async {
+
+                self.skills = skills
+            }
+        }
+    }
+
+    // FETCH EXERCISES
+
+    func fetchExercises() {
+
+        FirestoreService.shared.fetchExercises { exercises in
+
+            DispatchQueue.main.async {
+
+                self.exercises = exercises
+            }
+        }
+    }
+
+    // FETCH PROGRESS
+
+    func fetchProgress() {
+
+        FirestoreService.shared.fetchProgress { data in
+
+            DispatchQueue.main.async {
+
+                self.progress = data
+            }
+        }
+    }
+
+    // FETCH HISTORY
+
+    func fetchHistory() {
+
+        FirestoreService.shared.fetchLast7History { history in
+
+            DispatchQueue.main.async {
+
+                self.progressHistory = history
+            }
+        }
+    }
 
 
 }
