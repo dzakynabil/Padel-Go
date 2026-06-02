@@ -188,6 +188,50 @@ private let db = Firestore.firestore()
             }
     }
     
+    // FETCH LAST 7 HISTORY
+
+    func fetchLast7History(
+        completion: @escaping ([ProgressHistory]) -> Void
+    ) {
+
+        db.collection("progress_history")
+            .order(by: "date", descending: true)
+            .limit(to: 7)
+            .getDocuments(source: .server) { snapshot, error in
+
+                guard let documents = snapshot?.documents else {
+
+                    completion([])
+                    return
+                }
+
+                let history = documents.compactMap {
+                    document -> ProgressHistory? in
+
+                    let data = document.data()
+
+                    guard
+                        let id = data["id"] as? String,
+                        let timestamp =
+                            data["date"] as? Timestamp,
+                        let progress =
+                            data["progress"]
+                            as? [String: [String: Double]]
+                    else {
+
+                        return nil
+                    }
+
+                    return ProgressHistory(
+                        id: id,
+                        date: timestamp.dateValue(),
+                        progress: progress
+                    )
+                }
+
+                completion(history.reversed())
+            }
+    }
     
 
 
