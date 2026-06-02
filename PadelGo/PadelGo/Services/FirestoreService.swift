@@ -127,6 +127,39 @@ private let db = Firestore.firestore()
             }
     }
     
+    //FETCH CURRENT PROGRESS
+
+    func fetchProgress(
+        completion: @escaping ([String: [String: Double]]) -> Void
+        
+    ) {
+
+        db.collection("user_progress")
+            .document("local_user")
+            .getDocument { snapshot, error in
+
+                guard let data = snapshot?.data() else {
+
+                    completion([:])
+                    return
+                }
+
+                var formatted:
+                [String: [String: Double]] = [:]
+
+                for (skill, value) in data {
+
+                    if let criteria =
+                        value as? [String: Double] {
+                        
+                        formatted[skill] = criteria
+                    }
+                }
+
+                completion(formatted)
+            }
+    }
+    
     
 
 
