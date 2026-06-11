@@ -9,55 +9,7 @@ import SwiftUI
 
 struct SmartScheduleView: View {
 
-    @StateObject private var dataService =
-        PadelDataService.shared
-
-    // WEAKEST SKILL
-
-    var weakestSkill: String {
-
-        var averages:
-        [String: Double] = [:]
-
-        for skill in dataService.skills {
-
-            let values = Array(
-                dataService.progress[
-                    skill.name
-                ]?.values
-                ?? Dictionary<String, Double>().values
-            )
-
-            if values.isEmpty {
-
-                averages[skill.name] = 0
-
-            } else {
-
-                let total =
-                    values.reduce(0, +)
-
-                averages[skill.name] =
-                    total / Double(values.count)
-            }
-        }
-
-        let sorted =
-            averages.sorted {
-                $0.value < $1.value
-            }
-
-        return sorted.first?.key ?? "Serve"
-    }
-
-    var recommendedExercises:
-    [PadelExercise] {
-
-        dataService.exercises.filter {
-
-            $0.targetSkill == weakestSkill
-        }
-    }
+    @StateObject private var viewModel = SmartScheduleViewModel()
 
     var body: some View {
 
@@ -80,7 +32,7 @@ struct SmartScheduleView: View {
                     .font(.headline)
 
                     Text(
-                        "Today's focus: \(weakestSkill)"
+                        "Today's focus: \(viewModel.weakestSkill)"
                     )
                     .font(.subheadline)
                     .foregroundColor(.blue)
@@ -110,7 +62,7 @@ struct SmartScheduleView: View {
                         .font(.headline)
                         .padding(.horizontal)
 
-                    if recommendedExercises.isEmpty {
+                    if viewModel.recommendedExercises.isEmpty {
 
                         Text(
                             "No exercises available"
@@ -121,10 +73,41 @@ struct SmartScheduleView: View {
                     } else {
 
                         ForEach(
-                            recommendedExercises
+                            viewModel.recommendedExercises
                         ) { exercise in
 
                             HStack {
+
+                                // CHECKLIST BUTTON
+
+                                Button(action: {
+
+                                    viewModel.toggleExercise(
+                                        exercise: exercise
+                                    )
+
+                                }) {
+
+                                    Image(
+                                        systemName:
+                                            viewModel.completedExercises
+                                            .contains(
+                                                exercise.id
+                                            )
+                                            ? "checkmark.circle.fill"
+                                            : "circle"
+                                    )
+                                    .font(.title2)
+                                    .foregroundColor(
+                                        viewModel.completedExercises
+                                            .contains(
+                                                exercise.id
+                                            )
+                                        ? .green
+                                        : .gray
+                                    )
+                                }
+                                .buttonStyle(PlainButtonStyle())
 
                                 VStack(
                                     alignment: .leading,
@@ -134,6 +117,12 @@ struct SmartScheduleView: View {
                                     Text(exercise.name)
                                         .font(.body)
                                         .fontWeight(.medium)
+                                        .strikethrough(
+                                            viewModel.completedExercises
+                                                .contains(
+                                                    exercise.id
+                                                )
+                                        )
 
                                     Text(
                                         exercise.targetSkill
@@ -162,7 +151,10 @@ struct SmartScheduleView: View {
                             }
                             .padding()
                             .background(
-                                Color(.systemGray6)
+                                viewModel.completedExercises
+                                    .contains(exercise.id)
+                                ? Color.green.opacity(0.1)
+                                : Color(.systemGray6)
                             )
                             .cornerRadius(12)
                             .padding(.horizontal)
@@ -174,6 +166,10 @@ struct SmartScheduleView: View {
                 Spacer()
             }
             .navigationTitle("Smart Schedule")
+            .onAppear {
+
+                viewModel.loadCompletedExercises()
+            }
 
         }
     }

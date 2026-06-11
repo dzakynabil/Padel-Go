@@ -64,17 +64,6 @@ struct DashboardView: View {
                                 dataService.progressHistory
                             ) { item in
 
-                                let allValues =
-                                item.progress.values.flatMap {
-                                    $0.values
-                                }
-
-                                let average =
-                                allValues.reduce(0, +)
-                                / Double(
-                                    max(allValues.count, 1)
-                                )
-                                
                                 LineMark(
                                     x: .value(
                                         "Date",
@@ -82,7 +71,7 @@ struct DashboardView: View {
                                     ),
                                     y: .value(
                                         "Average",
-                                        average
+                                        item.averageProgress
                                     )
                                 )
                                 
@@ -93,7 +82,7 @@ struct DashboardView: View {
                                     ),
                                     y: .value(
                                         "Average",
-                                        average
+                                        item.averageProgress
                                     )
                                 )
                             }

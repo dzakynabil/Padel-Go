@@ -8,26 +8,7 @@ import SwiftUI
 
 struct ProgressTrackingView: View {
 
-    @StateObject private var dataService =
-        PadelDataService.shared
-
-    @State var selectedSkill: String = "Serve"
-
-    @State private var tempProgress:
-    [String: [String: Double]] = [:]
-
-    var skills: [String] {
-
-        dataService.skills.map { $0.name }
-    }
-
-    var currentSkill: PadelSkill? {
-
-        dataService.skills.first {
-
-            $0.name == selectedSkill
-        }
-    }
+    @StateObject private var viewModel = ProgressTrackingViewModel()
 
     var body: some View {
 
@@ -37,10 +18,10 @@ struct ProgressTrackingView: View {
 
                 Picker(
                     "Skill",
-                    selection: $selectedSkill
+                    selection: $viewModel.selectedSkill
                 ) {
 
-                    ForEach(skills, id: \.self) { skill in
+                    ForEach(viewModel.skills, id: \.self) { skill in
                         Text(skill)
                             .tag(skill)
                     }
@@ -52,7 +33,7 @@ struct ProgressTrackingView: View {
 
                     VStack(spacing: 16) {
 
-                        Text(currentSkill?.name ?? "")
+                        Text(viewModel.currentSkill?.name ?? "")
                             .font(.largeTitle)
                             .bold()
                             .padding(.top)
@@ -62,7 +43,7 @@ struct ProgressTrackingView: View {
                         VStack(spacing: 12) {
 
                             ForEach(
-                                currentSkill?.criteria ?? [],
+                                viewModel.currentSkill?.criteria ?? [],
                                 id: \.self
                             ) { key in
 
@@ -73,18 +54,11 @@ struct ProgressTrackingView: View {
                                     value: Binding(
 
                                         get: {
-
-                                            tempProgress[selectedSkill]?[key] ?? 0
+                                            viewModel.getProgressValue(for: key)
                                         },
 
                                         set: { newValue in
-
-                                            if tempProgress[selectedSkill] == nil {
-
-                                                tempProgress[selectedSkill] = [:]
-                                            }
-
-                                            tempProgress[selectedSkill]?[key] = newValue
+                                            viewModel.setProgressValue(for: key, value: newValue)
                                         }
                                     )
                                 )
@@ -94,33 +68,7 @@ struct ProgressTrackingView: View {
 
 
                         Button(action: {
-
-                            dataService.progress =
-                                tempProgress
-
-                            FirestoreService.shared
-                                .saveProgress(
-                                    progress: tempProgress
-                                ) {
-
-                                    FirestoreService.shared
-                                        .saveProgressHistory(
-                                            progress: tempProgress
-                                        )
-
-                                    dataService.fetchProgress()
-                                    dataService.fetchHistory()
-                                }
-
-
-                            UserDefaults.standard.set(
-                                Date().timeIntervalSince1970,
-                                forKey:
-                                    "lastProgressSaveDate"
-                            )
-
-                            print("All progress saved")
-
+                            viewModel.saveAllProgress()
                         }) {
 
                             Text("Save All Progress")
@@ -148,37 +96,8 @@ struct ProgressTrackingView: View {
 
             .onAppear {
 
-                loadCurrentProgress()
+                viewModel.loadCurrentProgress()
             }
-        }
-    }
-
-    // LOAD CURRENT PROGRESS
-
-    func loadCurrentProgress() {
-
-        DispatchQueue.main.asyncAfter(
-            deadline: .now() + 0.3
-        ) {
-
-            for skill in dataService.skills {
-
-                var criteriaValues:
-                [String: Double] = [:]
-
-                for criteria in skill.criteria {
-
-                    criteriaValues[criteria] =
-                        dataService.progress[
-                            skill.name
-                        ]?[criteria] ?? 0
-                }
-
-                tempProgress[skill.name] =
-                    criteriaValues
-            }
-            
         }
     }
 }
-

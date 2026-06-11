@@ -74,5 +74,22 @@ class PadelDataService: ObservableObject {
         }
     }
 
+    // SAVE PROGRESS & HISTORY
+    
+    func saveProgressData(newProgress: [String: [String: Double]], completion: @escaping () -> Void) {
+        // Update local state immediately
+        self.progress = newProgress
+        
+        // Save to Firestore
+        FirestoreService.shared.saveProgress(progress: newProgress) {
+            FirestoreService.shared.saveProgressHistory(progress: newProgress)
+            
+            // Refetch to ensure sync
+            self.fetchProgress()
+            self.fetchHistory()
+            
+            completion()
+        }
+    }
 
 }

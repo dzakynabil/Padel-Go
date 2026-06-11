@@ -9,37 +9,23 @@ import SwiftUI
 
 struct ExerciseGuideView: View {
     
-    @StateObject private var dataService = PadelDataService.shared
-    @State private var selectedSkill = "All"
-    
-    var skills: [String] {
-
-        ["All"] + dataService.skills.map { $0.name }
-    }
-    
-    var filteredExercises: [PadelExercise] {
-        if selectedSkill == "All" {
-            return dataService.exercises
-        } else {
-            return dataService.exercises.filter { $0.targetSkill == selectedSkill }
-        }
-    }
+    @StateObject private var viewModel = ExerciseGuideViewModel()
     
     var body: some View {
         NavigationStack {
             VStack {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
-                        ForEach(skills, id: \.self) { skill in
+                        ForEach(viewModel.skills, id: \.self) { skill in
                             Button(action: {
-                                selectedSkill = skill
+                                viewModel.selectedSkill = skill
                             }) {
                                 Text(skill)
                                     .font(.subheadline)
                                     .padding(.horizontal, 16)
                                     .padding(.vertical, 8)
-                                    .background(selectedSkill == skill ? Color.blue : Color(.systemGray5))
-                                    .foregroundColor(selectedSkill == skill ? .white : .black)
+                                    .background(viewModel.selectedSkill == skill ? Color.blue : Color(.systemGray5))
+                                    .foregroundColor(viewModel.selectedSkill == skill ? .white : .black)
                                     .cornerRadius(20)
                             }
                         }
@@ -49,7 +35,7 @@ struct ExerciseGuideView: View {
                 .padding(.vertical, 8)
                 
                 
-                List(filteredExercises) { exercise in
+                List(viewModel.filteredExercises) { exercise in
                     NavigationLink(destination: PadelExerciseDetailView(exercise: exercise)) {
                         HStack {
                             Image(exercise.imageIcon)
