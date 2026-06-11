@@ -17,4 +17,3 @@ struct PadelSkill: Identifiable, Codable {
     var name: String
     var criteria: [String]
 }
-
