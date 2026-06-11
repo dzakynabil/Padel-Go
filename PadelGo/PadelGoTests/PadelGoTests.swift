@@ -112,8 +112,25 @@ final class PadelGoTests: XCTestCase {
                 "Accuracy": 75
             ]
         ]
-
+        
         service.progress = mockProgress
+        
+        /*FirestoreService.shared.saveProgress(
+         progress: mockProgress
+     ) {
+
+         FirestoreService.shared.fetchProgress {
+             data in
+
+             XCTAssertEqual(
+                 data["Serve"]?["Accuracy"],
+                 75
+             )
+
+             expectation.fulfill()
+         }
+     }*/
+        
 
         XCTAssertEqual(
             service.progress["Serve"]?["Accuracy"],
@@ -133,6 +150,8 @@ final class PadelGoTests: XCTestCase {
                 ]
             ]
         )
+        
+        
 
         XCTAssertEqual(
             history.progress["Serve"]?["Accuracy"],
