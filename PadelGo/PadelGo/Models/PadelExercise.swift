@@ -8,3 +8,4 @@ struct PadelExercise: Identifiable, Codable {
     var imageIcon: String
     var targetSkill: String
 }
+
