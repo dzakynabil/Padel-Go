@@ -13,6 +13,8 @@ struct PadelGoApp: App {
 
     init() {
         FirebaseApp.configure()
+        
+        _ = WatchSessionManager.shared
     
     }
 
